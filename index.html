@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitPath — 83kg → 70kg Diet Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: #2a2f42;
+    --accent: #4ade80;
+    --accent2: #22d3ee;
+    --accent3: #f59e0b;
+    --danger: #f87171;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --protein: #f472b6;
+    --carbs: #60a5fa;
+    --fat: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(15,17,23,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--text); }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 10px;
+  }
+  .nav-tab {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .nav-tab.active {
+    background: var(--accent);
+    color: #0f1117;
+    font-weight: 600;
+  }
+  .nav-tab:hover:not(.active) { color: var(--text); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 60px 32px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(74,222,128,0.12);
+    border: 1px solid rgba(74,222,128,0.3);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .stat-label { color: var(--muted); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+
+  /* PROGRESS */
+  .progress-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .progress-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+  .weight-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .weight-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .weight-num.current { color: var(--accent3); }
+  .weight-num.target { color: var(--accent); }
+  .progress-track {
+    background: var(--surface2);
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .progress-labels { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
+
+  /* INPUT GROUP */
+  .input-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+  .input-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  input[type="number"], input[type="text"], select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input[type="number"]:focus, input[type="text"]:focus, select:focus {
+    border-color: var(--accent);
+  }
+  .btn {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #0f1117; }
+  .btn-primary:hover { background: #22c55e; transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: rgba(248,113,113,0.1); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+  .btn-danger:hover { background: rgba(248,113,113,0.2); }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 18px; }
+
+  /* MACRO BARS */
+  .macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .macro-item { background: var(--surface2); border-radius: 12px; padding: 16px; }
+  .macro-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .macro-label.protein { color: var(--protein); }
+  .macro-label.carbs { color: var(--carbs); }
+  .macro-label.fat { color: var(--fat); }
+  .macro-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .macro-bar-track { background: var(--bg); border-radius: 4px; height: 5px; }
+  .macro-bar-fill { height: 100%; border-radius: 4px; }
+  .macro-bar-fill.protein { background: var(--protein); }
+  .macro-bar-fill.carbs { background: var(--carbs); }
+  .macro-bar-fill.fat { background: var(--fat); }
+  .macro-pct { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* MEAL PLAN */
+  .meal-day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .meal-day-header {
+    background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(34,211,238,0.05));
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .meal-day-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .meal-day-cals { font-size: 12px; color: var(--accent); font-weight: 600; background: rgba(74,222,128,0.1); padding: 4px 10px; border-radius: 20px; }
+  .meal-rows { padding: 8px 0; }
+  .meal-row {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(42,47,66,0.5);
+    transition: background 0.15s;
+  }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-row:hover { background: rgba(255,255,255,0.02); }
+  .meal-type-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .meal-type-badge.breakfast { background: rgba(245,158,11,0.15); color: var(--accent3); }
+  .meal-type-badge.lunch { background: rgba(74,222,128,0.15); color: var(--accent); }
+  .meal-type-badge.snack { background: rgba(34,211,238,0.15); color: var(--accent2); }
+  .meal-type-badge.dinner { background: rgba(244,114,182,0.15); color: var(--protein); }
+  .meal-name { font-weight: 500; font-size: 14px; margin-bottom: 3px; }
+  .meal-desc { font-size: 12px; color: var(--muted); }
+  .meal-cals { font-size: 12px; color: var(--muted); white-space: nowrap; text-align: right; }
+  .meal-cals strong { display: block; font-size: 15px; font-weight: 700; color: var(--text); }
+
+  /* WATER TRACKER */
+  .water-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .water-cup {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .water-cup.filled { background: rgba(34,211,238,0.2); border-color: var(--accent2); }
+  .water-cup:hover:not(.filled) { border-color: var(--accent2); background: rgba(34,211,238,0.05); }
+  .water-status { font-size: 13px; color: var(--muted); }
+  .water-status strong { color: var(--accent2); }
+
+  /* WEEKLY CHART */
+  .chart-area { position: relative; height: 200px; }
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 100%;
+    padding-bottom: 24px;
+  }
+  .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+  .chart-bar-wrap { width: 100%; flex: 1; display: flex; align-items: flex-end; }
+  .chart-bar {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(180deg, var(--accent), rgba(74,222,128,0.4));
+    transition: height 0.5s ease;
+    min-height: 4px;
+    cursor: pointer;
+    position: relative;
+  }
+  .chart-bar:hover { background: linear-gradient(180deg, #86efac, var(--accent)); }
+  .chart-bar-label { font-size: 11px; color: var(--muted); }
+  .chart-bar-val { font-size: 11px; font-weight: 600; color: var(--accent); }
+  .chart-y-line {
+    position: absolute;
+    left: 0; right: 0;
+    border-top: 1px dashed rgba(74,222,128,0.15);
+  }
+  .chart-y-label { position: absolute; left: 0; font-size: 10px; color: var(--muted); }
+
+  /* TIPS */
+  .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .tip-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 18px;
+    border-left: 3px solid var(--accent);
+  }
+  .tip-card.warning { border-left-color: var(--accent3); }
+  .tip-card.danger { border-left-color: var(--danger); }
+  .tip-card.info { border-left-color: var(--accent2); }
+  .tip-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .tip-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .tip-text li { margin-left: 14px; margin-bottom: 3px; }
+
+  /* WEEK VARIATION */
+  .week-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .week-tab {
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .week-tab.active { background: var(--accent); color: #0f1117; border-color: var(--accent); font-weight: 600; }
+  .week-tab:hover:not(.active) { border-color: var(--text); color: var(--text); }
+
+  /* LOG TABLE */
+  .log-table { width: 100%; border-collapse: collapse; }
+  .log-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .log-table td {
+    padding: 12px 12px;
+    border-bottom: 1px solid rgba(42,47,66,0.4);
+    font-size: 13px;
+  }
+  .log-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag.loss { background: rgba(74,222,128,0.15); color: var(--accent); }
+  .tag.gain { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+  /* SECTION HEADINGS */
+  .section-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .section-sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--accent);
+    color: #0f1117;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 999;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 12px 16px; }
+    .nav-tabs { display: none; }
+    .section { padding: 20px 16px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .macro-grid { grid-template-columns: 1fr; }
+    .tips-grid { grid-template-columns: 1fr; }
+    .meal-row { grid-template-columns: 80px 1fr; }
+    .meal-cals { display: none; }
+    .hero { padding: 40px 16px 20px; }
+    .mobile-tabs {
+      display: flex !important;
+      overflow-x: auto;
+      gap: 4px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-tabs .nav-tab { white-space: nowrap; font-size: 12px; padding: 6px 12px; }
+  }
+  .mobile-tabs { display: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Fit<span>Path</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+    <button class="nav-tab" onclick="showSection('meal-plan')">Meal Plan</button>
+    <button class="nav-tab" onclick="showSection('tracker')">Weight Log</button>
+    <button class="nav-tab" onclick="showSection('tips')">Tips & Safety</button>
+  </div>
+</nav>
+
+<div class="mobile-tabs" id="mobileTabs">
+  <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+  <button class="nav-tab" onclick="showSection('meal-plan')">Meal Plan</button>
+  <button class="nav-tab" onclick="showSection('tracker')">Weight Log</button>
+  <button class="nav-tab" onclick="showSection('tips')">Tips & Safety</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section active" id="dashboard">
+
+  <div class="hero">
+    <div class="hero-badge">Your 13-Week Journey</div>
+    <h1>83 kg <span class="highlight">→ 70 kg</span></h1>
+    <p class="hero-sub">A personalised, safe weight loss plan built for you — ~1 kg/week, non-vegetarian, ₹200/day budget.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--accent3)">83 kg</div>
+      <div class="stat-label">Start Weight</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--accent)">70 kg</div>
+      <div class="stat-label">Target Weight</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: var(--accent2)">1,700</div>
+      <div class="stat-label">Daily Calories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="etaWeeks" style="color: var(--protein)">13 wks</div>
+      <div class="stat-label">Estimated ETA</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Weight Progress</div>
+      <div class="weight-display">
+        <div>Start <span class="weight-num" style="color:var(--accent3)">83 kg</span></div>
+        <div style="color:var(--border);font-size:20px">→</div>
+        <div>Now <span class="weight-num current" id="currentDisplay">83 kg</span></div>
+        <div style="color:var(--border);font-size:20px">→</div>
+        <div>Goal <span class="weight-num target">70 kg</span></div>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-labels">
+      <span>83 kg</span>
+      <span id="progressPct">0% complete</span>
+      <span>70 kg</span>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Log Today's Weight (kg)</label>
+        <input type="number" id="weightInput" step="0.1" min="60" max="90" placeholder="e.g. 82.5">
+      </div>
+      <button class="btn btn-primary" onclick="logWeight()">Log Weight</button>
+    </div>
+  </div>
+
+  <!-- Macros -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> Daily Calorie & Macro Targets</div>
+    <div style="background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.2); border-radius: 10px; padding: 14px; margin-bottom: 18px; font-size: 13px; color: var(--muted);">
+      <strong style="color: var(--accent)">Calorie Strategy:</strong> TDEE ≈ 2,200 kcal (sedentary, 25M, 83 kg) → Deficit of 500 kcal → <strong style="color:var(--text)">1,700 kcal/day</strong> for ~0.5–1 kg/week loss.
+    </div>
+    <div class="macro-grid">
+      <div class="macro-item">
+        <div class="macro-label protein">Protein</div>
+        <div class="macro-val" style="color: var(--protein)">130g</div>
+        <div class="macro-bar-track"><div class="macro-bar-fill protein" style="width:100%"></div></div>
+        <div class="macro-pct">520 kcal · 30% of calories · Preserves muscle</div>
+      </div>
+      <div class="macro-item">
+        <div class="macro-label carbs">Carbohydrates</div>
+        <div class="macro-val" style="color: var(--carbs)">170g</div>
+        <div class="macro-bar-track"><div class="macro-bar-fill carbs" style="width:80%"></div></div>
+        <div class="macro-pct">680 kcal · 40% of calories · Complex carbs only</div>
+      </div>
+      <div class="macro-item">
+        <div class="macro-label fat">Healthy Fats</div>
+        <div class="macro-val" style="color: var(--fat)">56g</div>
+        <div class="macro-bar-track"><div class="macro-bar-fill fat" style="width:60%"></div></div>
+        <div class="macro-pct">500 kcal · 30% of calories · Nuts, ghee, fish</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Water -->
+  <div class="card">
+    <div class="card-title"><span class="icon">💧</span> Hydration Tracker — Goal: 10 glasses / day</div>
+    <div class="water-grid" id="waterGrid"></div>
+    <div class="water-status">Consumed: <strong id="waterCount">0</strong> / 10 glasses (250 ml each = <strong id="waterML">0</strong> ml)</div>
+    <div style="margin-top:12px; font-size:12px; color: var(--muted);">
+      💡 Drink a glass before each meal · Start morning with warm water + lemon · Avoid sugary drinks entirely
+    </div>
+  </div>
+
+  <!-- Weekly Chart -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📈</span> Weight Log Chart</div>
+    <div class="chart-area">
+      <div class="chart-bars" id="weightChart">
+        <div style="width:100%; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px;">
+          Log your weight daily to see your progress chart here.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MEAL PLAN -->
+<div class="section" id="meal-plan">
+  <div class="section-heading">7-Day Meal Plan</div>
+  <div class="section-sub">🥗 Veg: Mon, Thu, Sat &nbsp;|&nbsp; 🍗 Non-Veg: Tue, Wed, Fri, Sun &nbsp;|&nbsp; No brinjal · ₹200/day · ~1,700 kcal/day</div>
+
+  <div class="week-tabs">
+    <button class="week-tab active" onclick="showWeek(0)">Week 1–2</button>
+    <button class="week-tab" onclick="showWeek(1)">Week 3–4</button>
+    <button class="week-tab" onclick="showWeek(2)">Week 5–6</button>
+  </div>
+
+  <div id="mealContent"></div>
+</div>
+
+<!-- WEIGHT LOG -->
+<div class="section" id="tracker">
+  <div class="section-heading">Weight Log</div>
+  <div class="section-sub">Track every weigh-in. Weigh yourself at the same time each morning for accuracy.</div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚖️</span> Log a Weigh-In</div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Weight (kg)</label>
+        <input type="number" id="logWeight" step="0.1" min="60" max="90" placeholder="e.g. 82.5">
+      </div>
+      <div class="input-group">
+        <label>Date</label>
+        <input type="text" id="logDate" placeholder="Today">
+      </div>
+      <div class="input-group" style="max-width:160px">
+        <label>Mood</label>
+        <select id="logMood">
+          <option>😊 Great</option>
+          <option>😐 Okay</option>
+          <option>😩 Tough day</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="addLogEntry()">Add Entry</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> Weigh-In History</div>
+    <table class="log-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Weight</th>
+          <th>Change</th>
+          <th>Mood</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="logBody">
+        <tr><td colspan="5" style="text-align:center; color: var(--muted); padding: 30px">No entries yet. Start logging your weight!</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TIPS & SAFETY -->
+<div class="section" id="tips">
+  <div class="section-heading">Tips & Safety Guidelines</div>
+  <div class="section-sub">Science-backed advice for sustainable, healthy weight loss.</div>
+
+  <div class="tips-grid" style="margin-bottom: 20px">
+    <div class="tip-card">
+      <div class="tip-title">🏃 Exercise Plan (Sedentary → Active)</div>
+      <div class="tip-text">
+        <ul>
+          <li><strong>Week 1–2:</strong> 20–min brisk walk daily</li>
+          <li><strong>Week 3–4:</strong> Add 3× bodyweight circuits (squats, push-ups)</li>
+          <li><strong>Week 5+:</strong> 45-min walk + 2× resistance sessions</li>
+          <li>Even 10-min walks after meals dramatically aid fat loss</li>
+          <li>Avoid exercising on an empty stomach initially</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-card info">
+      <div class="tip-title">😴 Sleep & Recovery</div>
+      <div class="tip-text">
+        <ul>
+          <li>Sleep <strong>7–8 hours</strong> every night — essential for fat loss hormones</li>
+          <li>Sleep deprivation raises cortisol → increased hunger & fat retention</li>
+          <li>Avoid screens 1 hour before bed</li>
+          <li>Sleep before midnight for optimal melatonin & growth hormone</li>
+          <li>Aim for consistent wake-up time, even weekends</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-card warning">
+      <div class="tip-title">🧠 Stress Management</div>
+      <div class="tip-text">
+        <ul>
+          <li>High stress → high cortisol → belly fat accumulation</li>
+          <li>Try 10-min daily deep breathing or meditation</li>
+          <li>Avoid emotional/stress eating — identify triggers</li>
+          <li>Social support significantly improves weight loss success</li>
+          <li>Journaling cravings can reduce binge episodes by 40%</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-card danger">
+      <div class="tip-title">⚠️ Safety Rules — Never Break These</div>
+      <div class="tip-text">
+        <ul>
+          <li><strong>Never go below 1,500 kcal/day</strong> without medical supervision</li>
+          <li>Do NOT skip more than 1 meal per day</li>
+          <li>Avoid crash diets — they cause muscle loss, not fat loss</li>
+          <li>Losing >1.5 kg/week = likely muscle, not just fat</li>
+          <li>Always include all 3 macros in every meal</li>
+          <li>If dizzy, fatigued, or losing hair — consult a doctor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🛒</span> Budget Shopping Guide (₹200/day)</div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 13px;">
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-weight: 700; margin-bottom: 10px; color: var(--protein)">🥩 Proteins (₹60–80)</div>
+        <div style="color: var(--muted); line-height: 2">
+          Eggs (6) — ₹36<br>
+          Chicken (150g) — ₹40<br>
+          Rohu/Catla fish — ₹35<br>
+          Curd/dahi 200g — ₹20<br>
+          Dal (any) — ₹15
+        </div>
+      </div>
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-weight: 700; margin-bottom: 10px; color: var(--carbs)">🌾 Carbs (₹40–60)</div>
+        <div style="color: var(--muted); line-height: 2">
+          Brown rice (200g) — ₹12<br>
+          Whole wheat atta — ₹8<br>
+          Oats 80g — ₹14<br>
+          Sweet potato — ₹12<br>
+          Banana 2× — ₹10
+        </div>
+      </div>
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-weight: 700; margin-bottom: 10px; color: var(--fat)">🥦 Veggies & Fats (₹40–60)</div>
+        <div style="color: var(--muted); line-height: 2">
+          Spinach/Palak — ₹15<br>
+          Tomato, onion — ₹10<br>
+          Cucumber, carrot — ₹12<br>
+          Groundnut oil — ₹8<br>
+          Mustard seeds — ₹5
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📐</span> BMI & Health Metrics</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: center;">
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform:uppercase">Current BMI</div>
+        <div style="font-family: Syne; font-size: 26px; font-weight: 800; color: var(--accent3)">27.5</div>
+        <div style="font-size: 11px; color: var(--accent3)">Overweight</div>
+      </div>
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform:uppercase">Target BMI</div>
+        <div style="font-family: Syne; font-size: 26px; font-weight: 800; color: var(--accent)">23.2</div>
+        <div style="font-size: 11px; color: var(--accent)">Healthy Range</div>
+      </div>
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform:uppercase">Height Assumed</div>
+        <div style="font-family: Syne; font-size: 26px; font-weight: 800; color: var(--accent2)">175 cm</div>
+        <div style="font-size: 11px; color: var(--muted)">Standard (25M)</div>
+      </div>
+      <div style="background: var(--surface2); border-radius: 10px; padding: 16px;">
+        <div style="font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform:uppercase">Total to Lose</div>
+        <div style="font-family: Syne; font-size: 26px; font-weight: 800; color: var(--protein)">13 kg</div>
+        <div style="font-size: 11px; color: var(--muted)">~13 weeks</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Done!</div>
+
+<script>
+// ===== DATA =====
+const START = 83, TARGET = 70;
+
+// 🥗 VEG days: Monday, Thursday, Saturday
+// 🍗 NON-VEG days: Tuesday, Wednesday, Friday, Sunday
+const meals = [
+  {
+    week: 'Week 1–2: Foundation',
+    days: [
+      {
+        day: 'Monday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats Porridge + Peanut Butter', desc: '80g oats cooked in water + 1 tbsp peanut butter + 1 banana + 5 almonds', cals: 410, protein: 16 },
+          { type: 'lunch', name: 'Rajma + Brown Rice + Raita', desc: '1 cup rajma (kidney beans) curry + ¾ cup brown rice + cucumber-onion raita (low-fat curd)', cals: 490, protein: 22 },
+          { type: 'snack', name: 'Roasted Chana + Curd', desc: '40g roasted chana + 1 cup low-fat dahi + pinch of jeera & black salt', cals: 200, protein: 14 },
+          { type: 'dinner', name: 'Paneer Bhurji + Roti + Sabzi', desc: '100g low-fat paneer bhurji + 2 whole wheat rotis + palak sabzi (no cream)', cals: 530, protein: 26 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Bhurji + Toast', desc: '3 eggs scrambled with onion, tomato, green chilli + 2 whole wheat toast', cals: 400, protein: 24 },
+          { type: 'lunch', name: 'Chicken Rice Bowl', desc: '150g grilled/boiled chicken breast + ¾ cup brown rice + cucumber salad', cals: 490, protein: 42 },
+          { type: 'snack', name: 'Boiled Egg + Fruit', desc: '1 boiled egg + 1 medium apple or guava', cals: 160, protein: 8 },
+          { type: 'dinner', name: 'Chicken Soup + Roti', desc: 'Spiced chicken clear soup (150g chicken) + 2 whole wheat rotis + green salad', cals: 510, protein: 40 },
+        ]
+      },
+      {
+        day: 'Wednesday 🍗', calories: 1680, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Poha with Eggs', desc: '1 cup cooked poha + 2 scrambled eggs + peas + curry leaves seasoning', cals: 390, protein: 22 },
+          { type: 'lunch', name: 'Mackerel Masala + Roti', desc: '150g fresh mackerel masala fry (minimal oil) + 2 rotis + onion-tomato salad', cals: 500, protein: 38 },
+          { type: 'snack', name: 'Banana Smoothie', desc: '1 banana + 200ml low-fat milk blended (no sugar)', cals: 170, protein: 7 },
+          { type: 'dinner', name: 'Chicken Stir-Fry + Rice', desc: '150g chicken with capsicum & onion stir-fry (minimal oil) + ½ cup brown rice', cals: 490, protein: 42 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Upma + Curd', desc: '1 cup sooji upma (minimal ghee) + 1 cup low-fat curd + 1 banana', cals: 420, protein: 14 },
+          { type: 'lunch', name: 'Chana Dal + Brown Rice + Sabzi', desc: '1 cup chana dal + ¾ cup brown rice + mixed vegetable sabzi (no brinjal)', cals: 490, protein: 22 },
+          { type: 'snack', name: 'Sprouts Chaat', desc: '1 cup moong sprouts + chopped tomato, onion, cucumber + lemon + chaat masala', cals: 150, protein: 10 },
+          { type: 'dinner', name: 'Paneer + Sweet Potato + Roti', desc: '80g grilled/sautéed paneer + 1 boiled sweet potato + 2 whole wheat rotis + green chutney', cals: 520, protein: 22 },
+        ]
+      },
+      {
+        day: 'Friday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Whole Wheat Paratha + Egg', desc: '2 whole wheat parathas (minimal ghee) + 2-egg omelette + cucumber slices', cals: 430, protein: 22 },
+          { type: 'lunch', name: 'Chicken + Chana Dal Combo', desc: '100g chicken + 1 cup chana dal + ½ cup rice + salad', cals: 490, protein: 44 },
+          { type: 'snack', name: 'Peanuts + Fruit', desc: '20g roasted peanuts + 1 orange or pear', cals: 150, protein: 6 },
+          { type: 'dinner', name: 'Egg Omelette + Roti + Sabzi', desc: '3-egg omelette + 2 rotis + aloo-methi sabzi (light oil)', cals: 500, protein: 30 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats + Peanut Butter + Fruit', desc: '80g oats porridge + 1 tbsp peanut butter + 1 banana + 5 walnuts', cals: 440, protein: 14 },
+          { type: 'lunch', name: 'Chole + Brown Rice + Raita', desc: '1 cup chole (chickpea) curry + ½ cup brown rice + cucumber raita + onion salad', cals: 500, protein: 20 },
+          { type: 'snack', name: 'Coconut Water + Roasted Chana', desc: '1 coconut water + 30g roasted chana', cals: 160, protein: 8 },
+          { type: 'dinner', name: 'Palak Paneer + Roti', desc: '100g paneer in spinach gravy (minimal cream) + 2 whole wheat rotis + cucumber salad', cals: 530, protein: 24 },
+        ]
+      },
+      {
+        day: 'Sunday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Idli + Egg Curry', desc: '4 steamed idlis + 2-egg tomato-based curry + coconut chutney (small)', cals: 420, protein: 24 },
+          { type: 'lunch', name: 'Fish Thali', desc: 'Rohu fish curry (150g) + ½ cup brown rice + masoor dal + mixed sabzi', cals: 520, protein: 40 },
+          { type: 'snack', name: 'Boiled Egg + Cucumber', desc: '1 boiled egg + sliced cucumber with rock salt & lemon', cals: 110, protein: 8 },
+          { type: 'dinner', name: 'Chicken Soup + Toast', desc: 'Clear spiced chicken soup (150g chicken + veggies) + 2 whole wheat toasts', cals: 450, protein: 35 },
+        ]
+      },
+    ]
+  },
+  {
+    week: 'Week 3–4: Building Momentum',
+    days: [
+      {
+        day: 'Monday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Besan Cheela + Curd', desc: '2 besan cheelas (gram flour pancakes) + 1 cup low-fat dahi + green chutney', cals: 390, protein: 18 },
+          { type: 'lunch', name: 'Moong Dal Khichdi + Raita', desc: '1 cup moong dal khichdi (½ cup rice + dal) + 1 cup raita + pickle', cals: 480, protein: 20 },
+          { type: 'snack', name: 'Makhana + Curd', desc: '30g roasted makhana (fox nuts) + 1 small cup dahi', cals: 150, protein: 7 },
+          { type: 'dinner', name: 'Tofu Stir-Fry + Roti', desc: '150g tofu (paneer substitute) stir-fry with capsicum & peas + 2 rotis', cals: 510, protein: 24 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗', calories: 1680, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Dalia + Boiled Eggs', desc: '80g dalia (broken wheat) porridge + 2 boiled eggs + 1 banana', cals: 410, protein: 24 },
+          { type: 'lunch', name: 'Chicken Keema + Rice', desc: '150g minced chicken keema sabzi (minimal oil) + ½ cup rice + onion salad', cals: 500, protein: 44 },
+          { type: 'snack', name: 'Fruit Bowl', desc: 'Seasonal fruit: papaya + pomegranate (avoid mango/grapes)', cals: 130, protein: 2 },
+          { type: 'dinner', name: 'Egg Fried Rice (Light)', desc: '3-egg light fried rice with peas, carrot, cabbage + minimal oil', cals: 490, protein: 28 },
+        ]
+      },
+      {
+        day: 'Wednesday 🍗', calories: 1710, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Sandwich', desc: '2 whole wheat slices + 2-egg omelette + lettuce, tomato (no mayo)', cals: 380, protein: 22 },
+          { type: 'lunch', name: 'Fish + Brown Rice Plate', desc: '150g rohu fish curry + ½ cup brown rice + palak sabzi + dahi', cals: 510, protein: 38 },
+          { type: 'snack', name: 'Peanut Butter Toast', desc: '1 whole wheat toast + 1 tbsp peanut butter + black coffee (no sugar)', cals: 180, protein: 7 },
+          { type: 'dinner', name: 'Tandoori Chicken + Roti', desc: '2 pieces home-grilled tandoori chicken (air fry/tawa) + 2 rotis + onion salad', cals: 530, protein: 46 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Dalia Porridge + Peanuts', desc: '80g dalia cooked in low-fat milk + 10g peanuts + 1 apple', cals: 400, protein: 14 },
+          { type: 'lunch', name: 'Rajma + Roti + Salad', desc: '1 cup rajma curry + 2 whole wheat rotis + mixed vegetable salad', cals: 490, protein: 22 },
+          { type: 'snack', name: 'Sprouts + Curd', desc: '1 cup boiled moong sprouts + 1 cup dahi + cumin', cals: 170, protein: 14 },
+          { type: 'dinner', name: 'Paneer Sabzi + Roti', desc: '100g paneer in tomato-onion masala (dry, no cream) + 2 rotis + cucumber raita', cals: 530, protein: 24 },
+        ]
+      },
+      {
+        day: 'Friday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Poha + Boiled Eggs', desc: '1 cup cooked poha with peas & curry leaves + 2 boiled eggs', cals: 400, protein: 22 },
+          { type: 'lunch', name: 'Chicken + Dal Combo', desc: '100g grilled chicken + 1 cup masoor dal + ½ cup brown rice + salad', cals: 490, protein: 44 },
+          { type: 'snack', name: 'Boiled Egg + Fruit', desc: '1 boiled egg + 1 guava or orange', cals: 150, protein: 8 },
+          { type: 'dinner', name: 'Prawn Masala + Roti', desc: '150g prawn dry masala (minimal oil) + 2 rotis + palak sabzi', cals: 520, protein: 40 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats + Banana + Almonds', desc: '80g oats porridge + 1 banana + 8 almonds + cinnamon', cals: 420, protein: 12 },
+          { type: 'lunch', name: 'Chole Roti + Raita', desc: '1 cup chole (chickpeas) + 2 whole wheat rotis + onion-cucumber raita', cals: 500, protein: 22 },
+          { type: 'snack', name: 'Roasted Makhana', desc: '40g roasted makhana (fox nuts) + spices + black coffee (no sugar)', cals: 150, protein: 5 },
+          { type: 'dinner', name: 'Mixed Dal + Rice + Sabzi', desc: '1 cup mixed dal (moong + masoor) + ½ cup brown rice + bhindi sabzi (no brinjal)', cals: 500, protein: 22 },
+        ]
+      },
+      {
+        day: 'Sunday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Paratha + Egg', desc: '2 whole wheat parathas (minimal ghee) + 2 egg omelette + green chutney', cals: 430, protein: 22 },
+          { type: 'lunch', name: 'Chicken Biryani (Light)', desc: '½ cup light chicken biryani (brown rice) + 1 cup raita + onion salad', cals: 500, protein: 38 },
+          { type: 'snack', name: 'Coconut Water + Fruit', desc: '1 coconut water + 1 guava or small orange', cals: 120, protein: 2 },
+          { type: 'dinner', name: 'Grilled Chicken + Salad + Roti', desc: '180g grilled chicken breast + large mixed salad + 1 whole wheat roti', cals: 490, protein: 48 },
+        ]
+      },
+    ]
+  },
+  {
+    week: 'Week 5–6: Maintaining & Pushing',
+    days: [
+      {
+        day: 'Monday 🥗 (Low Carb Veg)', calories: 1600, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Besan Cheela + Curd', desc: '3 besan cheelas + 1 cup dahi (no oil, minimal ghee) + green chutney', cals: 380, protein: 20 },
+          { type: 'lunch', name: 'Paneer Salad Bowl', desc: '100g grilled paneer + large salad (cabbage, cucumber, carrot, tomato) + lemon dressing + 1 roti', cals: 420, protein: 26 },
+          { type: 'snack', name: 'Sprouts Chaat', desc: '1 cup mixed sprouts + tomato, cucumber + lemon + no-oil seasoning', cals: 150, protein: 10 },
+          { type: 'dinner', name: 'Dal Tadka + Roti + Sabzi', desc: '1 cup dal tadka (moong) + 2 rotis + palak-aloo sabzi (light)', cals: 490, protein: 20 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗 (Low Carb Non-Veg)', calories: 1600, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Omelette + Peanut Butter', desc: '4-egg omelette with spinach + 1 tbsp peanut butter (skip bread)', cals: 380, protein: 32 },
+          { type: 'lunch', name: 'Grilled Chicken Salad', desc: '200g grilled chicken breast + large salad (cabbage, cucumber, carrot, tomato) + olive oil dressing', cals: 420, protein: 52 },
+          { type: 'snack', name: 'Boiled Eggs + Coffee', desc: '2 boiled eggs + 1 black coffee (no sugar)', cals: 140, protein: 14 },
+          { type: 'dinner', name: 'Fish + Stir-Fry Veggies', desc: '200g grilled/baked fish + stir-fried beans, peas, carrots (minimal oil)', cals: 460, protein: 46 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗 (Refeed Veg)', calories: 1900, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Paratha + Curd + Lassi', desc: '2 aloo parathas (small, minimal ghee) + 1 cup curd + 1 glass buttermilk (chaas)', cals: 520, protein: 18 },
+          { type: 'lunch', name: 'Full Veg Thali', desc: '1 cup rajma + ½ cup rice + 2 rotis + sabzi + raita + salad', cals: 620, protein: 26 },
+          { type: 'snack', name: 'Banana + Peanuts', desc: '2 bananas + 20g roasted peanuts', cals: 200, protein: 6 },
+          { type: 'dinner', name: 'Paneer + Dal + Roti', desc: '80g paneer sabzi + 1 cup dal + 2 rotis + cucumber salad', cals: 530, protein: 28 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗 (Refeed Veg)', calories: 1900, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Idli + Sambhar + Chutney', desc: '4 steamed idlis + 1 cup vegetable sambhar + coconut chutney', cals: 440, protein: 16 },
+          { type: 'lunch', name: 'Chole Bhature (Light)', desc: '1 cup chole + 1 small bhatura (fried, once a week treat) + onion-lemon salad', cals: 580, protein: 20 },
+          { type: 'snack', name: 'Fruit Chaat', desc: 'Mixed fruit chaat: apple, pomegranate, guava + chaat masala (no sugar)', cals: 180, protein: 3 },
+          { type: 'dinner', name: 'Mixed Veg Dal Khichdi', desc: '1 cup dal-rice khichdi + 1 cup raita + roasted papad', cals: 520, protein: 20 },
+        ]
+      },
+    ]
+  }
+];
+
+// ===== STATE =====
+let weightLog = JSON.parse(localStorage.getItem('fitpath_log') || '[]');
+let waterCount = parseInt(localStorage.getItem('fitpath_water') || '0');
+let currentWeek = 0;
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initWater();
+  renderMeals(0);
+  renderLog();
+  renderChart();
+  updateProgress();
+  const today = new Date();
+  document.getElementById('logDate').value = today.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+});
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    if (t.getAttribute('onclick')?.includes(id)) t.classList.add('active');
+  });
+}
+
+// ===== WATER =====
+function initWater() {
+  const grid = document.getElementById('waterGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const cup = document.createElement('div');
+    cup.className = 'water-cup' + (i < waterCount ? ' filled' : '');
+    cup.innerHTML = '💧';
+    cup.onclick = () => toggleWater(i);
+    grid.appendChild(cup);
+  }
+  document.getElementById('waterCount').textContent = waterCount;
+  document.getElementById('waterML').textContent = waterCount * 250;
+}
+
+function toggleWater(i) {
+  waterCount = i < waterCount ? i : i + 1;
+  localStorage.setItem('fitpath_water', waterCount);
+  initWater();
+  if (waterCount >= 8) showToast('🎉 Great hydration today!');
+}
+
+// ===== WEIGHT PROGRESS =====
+function updateProgress() {
+  const latest = weightLog.length ? weightLog[weightLog.length - 1].weight : START;
+  const lost = START - latest;
+  const total = START - TARGET;
+  const pct = Math.min(100, Math.max(0, (lost / total) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = Math.round(pct) + '% complete';
+  document.getElementById('currentDisplay').textContent = latest + ' kg';
+  const weeksLeft = Math.max(0, Math.ceil((latest - TARGET)));
+  document.getElementById('etaWeeks').textContent = weeksLeft + ' wks';
+}
+
+function logWeight() {
+  const val = parseFloat(document.getElementById('weightInput').value);
+  if (!val || val < 60 || val > 90) { showToast('❌ Enter a valid weight (60–90 kg)'); return; }
+  const today = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short' });
+  weightLog.push({ weight: val, date: today, mood: '😊 Logged' });
+  localStorage.setItem('fitpath_log', JSON.stringify(weightLog));
+  updateProgress();
+  renderChart();
+  renderLog();
+  showToast('✓ Weight logged: ' + val + ' kg');
+  document.getElementById('weightInput').value = '';
+}
+
+// ===== CHART =====
+function renderChart() {
+  const chart = document.getElementById('weightChart');
+  if (!weightLog.length) return;
+  const data = weightLog.slice(-14);
+  const max = Math.max(...data.map(d => d.weight)) + 0.5;
+  const min = Math.min(...data.map(d => d.weight)) - 0.5;
+  const range = max - min || 1;
+  chart.innerHTML = '';
+  data.forEach(entry => {
+    const pct = ((entry.weight - min) / range) * 90 + 5;
+    const col = document.createElement('div');
+    col.className = 'chart-col';
+    col.innerHTML = `
+      <div class="chart-bar-val">${entry.weight}</div>
+      <div class="chart-bar-wrap">
+        <div class="chart-bar" style="height:${pct}%" title="${entry.weight} kg on ${entry.date}"></div>
+      </div>
+      <div class="chart-bar-label">${entry.date}</div>
+    `;
+    chart.appendChild(col);
+  });
+}
+
+// ===== LOG =====
+function addLogEntry() {
+  const weight = parseFloat(document.getElementById('logWeight').value);
+  const date = document.getElementById('logDate').value || 'Today';
+  const mood = document.getElementById('logMood').value;
+  if (!weight || weight < 60 || weight > 90) { showToast('❌ Invalid weight'); return; }
+  weightLog.push({ weight, date, mood });
+  localStorage.setItem('fitpath_log', JSON.stringify(weightLog));
+  renderLog();
+  renderChart();
+  updateProgress();
+  document.getElementById('logWeight').value = '';
+  showToast('✓ Entry added!');
+}
+
+function renderLog() {
+  const tbody = document.getElementById('logBody');
+  if (!weightLog.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--muted); padding: 30px">No entries yet. Start logging your weight!</td></tr>';
+    return;
+  }
+  tbody.innerHTML = weightLog.slice().reverse().map((entry, i, arr) => {
+    const prev = arr[i + 1];
+    const diff = prev ? (entry.weight - prev.weight).toFixed(1) : null;
+    const changeTag = diff
+      ? `<span class="tag ${parseFloat(diff) < 0 ? 'loss' : 'gain'}">${parseFloat(diff) < 0 ? '' : '+'}${diff} kg</span>`
+      : '<span style="color:var(--muted)">—</span>';
+    return `
+      <tr>
+        <td>${entry.date}</td>
+        <td><strong>${entry.weight} kg</strong></td>
+        <td>${changeTag}</td>
+        <td>${entry.mood}</td>
+        <td><button class="btn btn-danger" style="padding:4px 10px; font-size:12px" onclick="deleteEntry(${weightLog.length - 1 - i})">Del</button></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function deleteEntry(i) {
+  weightLog.splice(i, 1);
+  localStorage.setItem('fitpath_log', JSON.stringify(weightLog));
+  renderLog();
+  renderChart();
+  updateProgress();
+  showToast('Entry removed');
+}
+
+// ===== MEALS =====
+function showWeek(idx) {
+  currentWeek = idx;
+  document.querySelectorAll('.week-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  renderMeals(idx);
+}
+
+function renderMeals(idx) {
+  const week = meals[idx];
+  const container = document.getElementById('mealContent');
+  container.innerHTML = `<div style="margin-bottom:16px; padding:14px 18px; background: rgba(74,222,128,0.06); border:1px solid rgba(74,222,128,0.2); border-radius:12px; font-size:13px; color: var(--muted)">
+    <strong style="color:var(--accent)">${week.week}</strong> — ${week.days.length} days shown.
+    &nbsp;🥗 <span style="color:#86efac">Green = Vegetarian (Mon/Thu/Sat)</span> &nbsp;|&nbsp; 🍗 <span style="color:#f9a8d4">Pink = Non-Veg (Tue/Wed/Fri/Sun)</span>
+  </div>` + week.days.map(day => {
+    const isVeg = day.veg;
+    const headerGrad = isVeg
+      ? 'linear-gradient(135deg, rgba(74,222,128,0.12), rgba(34,211,238,0.05))'
+      : 'linear-gradient(135deg, rgba(244,114,182,0.1), rgba(251,146,60,0.05))';
+    const badgeBg = isVeg ? 'rgba(74,222,128,0.15)' : 'rgba(244,114,182,0.15)';
+    const badgeColor = isVeg ? 'var(--accent)' : 'var(--protein)';
+    const badge = isVeg ? '🥗 Vegetarian' : '🍗 Non-Vegetarian';
+    return `
+    <div class="meal-day">
+      <div class="meal-day-header" style="background:${headerGrad}">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="meal-day-title">${day.day}</div>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:${badgeBg};color:${badgeColor};letter-spacing:0.5px">${badge}</span>
+        </div>
+        <div class="meal-day-cals">~${day.calories} kcal</div>
+      </div>
+      <div class="meal-rows">
+        ${day.meals.map(m => `
+          <div class="meal-row">
+            <div><span class="meal-type-badge ${m.type}">${m.type}</span></div>
+            <div>
+              <div class="meal-name">${m.name}</div>
+              <div class="meal-desc">${m.desc}</div>
+            </div>
+            <div class="meal-cals">
+              <strong>${m.cals} kcal</strong>
+              ${m.protein}g protein
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;}).join('');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
