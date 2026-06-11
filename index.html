@@ -365,7 +365,7 @@
   .chart-y-label { position: absolute; left: 0; font-size: 10px; color: var(--muted); }
 
   /* TIPS */
-  .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .tip-card {
     background: var(--surface2);
     border-radius: 12px;
@@ -463,8 +463,7 @@
     .section { padding: 20px 16px; }
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
     .macro-grid { grid-template-columns: 1fr; }
-    .tips-grid { grid-template-columns: 1fr; }
-    .meal-row { grid-template-columns: 80px 1fr; }
+    .tips-grid { grid-template-columns: 1fr; }    .meal-row { grid-template-columns: 80px 1fr; }
     .meal-cals { display: none; }
     .hero { padding: 40px 16px 20px; }
     .mobile-tabs {
@@ -502,9 +501,9 @@
 <div class="section active" id="dashboard">
 
   <div class="hero">
-    <div class="hero-badge">Your 13-Week Journey</div>
+    <div class="hero-badge">Your Complete 13-Week Journey</div>
     <h1>83 kg <span class="highlight">→ 70 kg</span></h1>
-    <p class="hero-sub">A personalised, safe weight loss plan built for you — ~1 kg/week, non-vegetarian, ₹200/day budget.</p>
+    <p class="hero-sub">A personalised, safe & sustainable weight loss plan — ~1 kg/week, non-vegetarian, no baigan, full 6-week variation, ₹200/day budget.</p>
   </div>
 
   <div class="stats-bar">
@@ -559,7 +558,7 @@
   <div class="card">
     <div class="card-title"><span class="icon">📊</span> Daily Calorie & Macro Targets</div>
     <div style="background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.2); border-radius: 10px; padding: 14px; margin-bottom: 18px; font-size: 13px; color: var(--muted);">
-      <strong style="color: var(--accent)">Calorie Strategy:</strong> TDEE ≈ 2,200 kcal (sedentary, 25M, 83 kg) → Deficit of 500 kcal → <strong style="color:var(--text)">1,700 kcal/day</strong> for ~0.5–1 kg/week loss.
+      <strong style="color: var(--accent)">Calorie Strategy:</strong> TDEE ≈ 2,200 kcal (sedentary, 25M, 83 kg) → <strong style="color:var(--text)">Phase 1–6 (Wk 1–4):</strong> 1,700 kcal | <strong style="color:var(--text)">Phase 2 (Wk 5–8):</strong> 1,600–1,650 kcal | <strong style="color:var(--text)">Phase 3 (Wk 9–10):</strong> 1,550–1,580 kcal | <strong style="color:var(--text)">Refeed days</strong> (Sat/Sun): 1,850–1,900 kcal to prevent metabolic adaptation. Target deficit: ~500 kcal/day.
     </div>
     <div class="macro-grid">
       <div class="macro-item">
@@ -610,12 +609,15 @@
 <!-- MEAL PLAN -->
 <div class="section" id="meal-plan">
   <div class="section-heading">7-Day Meal Plan</div>
-  <div class="section-sub">🥗 Veg: Mon, Thu, Sat &nbsp;|&nbsp; 🍗 Non-Veg: Tue, Wed, Fri, Sun &nbsp;|&nbsp; No brinjal · ₹200/day · ~1,700 kcal/day</div>
+  <div class="section-sub">🥗 Veg: Mon, Thu, Sat &nbsp;|&nbsp; 🍗 Non-Veg: Tue, Wed, Fri, Sun &nbsp;|&nbsp; No brinjal (baigan) · ₹200/day · ~1,600–1,750 kcal/day · Full 13-week plan</div>
 
   <div class="week-tabs">
     <button class="week-tab active" onclick="showWeek(0)">Week 1–2</button>
     <button class="week-tab" onclick="showWeek(1)">Week 3–4</button>
     <button class="week-tab" onclick="showWeek(2)">Week 5–6</button>
+    <button class="week-tab" onclick="showWeek(3)">Week 7–8</button>
+    <button class="week-tab" onclick="showWeek(4)">Week 9–10</button>
+    <button class="week-tab" onclick="showWeek(5)">Week 11–13</button>
   </div>
 
   <div id="mealContent"></div>
@@ -678,11 +680,13 @@
       <div class="tip-title">🏃 Exercise Plan (Sedentary → Active)</div>
       <div class="tip-text">
         <ul>
-          <li><strong>Week 1–2:</strong> 20–min brisk walk daily</li>
-          <li><strong>Week 3–4:</strong> Add 3× bodyweight circuits (squats, push-ups)</li>
-          <li><strong>Week 5+:</strong> 45-min walk + 2× resistance sessions</li>
-          <li>Even 10-min walks after meals dramatically aid fat loss</li>
-          <li>Avoid exercising on an empty stomach initially</li>
+          <li><strong>Week 1–2:</strong> 20-min brisk walk daily (morning preferred)</li>
+          <li><strong>Week 3–4:</strong> Add 3× bodyweight circuits (squats, push-ups, lunges)</li>
+          <li><strong>Week 5–6:</strong> 30-min walk + 2× resistance sessions/week</li>
+          <li><strong>Week 7–10:</strong> 45-min walk + 3× strength training (home or gym)</li>
+          <li><strong>Week 11–13:</strong> Jog 20 min + 3× full-body workouts</li>
+          <li>10-min walks after each meal boost fat burning significantly</li>
+          <li>Avoid exercising on a completely empty stomach early on</li>
         </ul>
       </div>
     </div>
@@ -690,11 +694,12 @@
       <div class="tip-title">😴 Sleep & Recovery</div>
       <div class="tip-text">
         <ul>
-          <li>Sleep <strong>7–8 hours</strong> every night — essential for fat loss hormones</li>
+          <li>Sleep <strong>7–8 hours</strong> every night — critical for fat-loss hormones</li>
           <li>Sleep deprivation raises cortisol → increased hunger & fat retention</li>
-          <li>Avoid screens 1 hour before bed</li>
-          <li>Sleep before midnight for optimal melatonin & growth hormone</li>
+          <li>Avoid screens 1 hour before bed; use blue-light glasses if needed</li>
+          <li>Sleep before midnight for optimal melatonin & growth hormone release</li>
           <li>Aim for consistent wake-up time, even weekends</li>
+          <li>Sleep quality matters as much as quantity — dark, cool room (18–22°C)</li>
         </ul>
       </div>
     </div>
@@ -703,10 +708,11 @@
       <div class="tip-text">
         <ul>
           <li>High stress → high cortisol → belly fat accumulation</li>
-          <li>Try 10-min daily deep breathing or meditation</li>
-          <li>Avoid emotional/stress eating — identify triggers</li>
-          <li>Social support significantly improves weight loss success</li>
+          <li>Try 10-min daily deep breathing (4-7-8 method) or meditation</li>
+          <li>Avoid emotional/stress eating — identify your triggers</li>
+          <li>Social support significantly improves weight loss success rates</li>
           <li>Journaling cravings can reduce binge episodes by 40%</li>
+          <li>Take a 5-min walk when cravings strike — they pass in 10 minutes</li>
         </ul>
       </div>
     </div>
@@ -717,9 +723,38 @@
           <li><strong>Never go below 1,500 kcal/day</strong> without medical supervision</li>
           <li>Do NOT skip more than 1 meal per day</li>
           <li>Avoid crash diets — they cause muscle loss, not fat loss</li>
-          <li>Losing >1.5 kg/week = likely muscle, not just fat</li>
+          <li>Losing >1.5 kg/week = likely muscle, water loss — not just fat</li>
           <li>Always include all 3 macros in every meal</li>
-          <li>If dizzy, fatigued, or losing hair — consult a doctor</li>
+          <li>If dizzy, fatigued, hair loss, or very cold — consult a doctor immediately</li>
+          <li>Take progress photos every 2 weeks — scale isn't everything</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-card info">
+      <div class="tip-title">⏰ Meal Timing & Intermittent Fasting</div>
+      <div class="tip-text">
+        <ul>
+          <li>Eat within a <strong>10–12 hour window</strong> (e.g. 8 AM to 8 PM)</li>
+          <li>Breakfast: within 1 hour of waking up; jumpstarts metabolism</li>
+          <li>Largest meal at lunch — lightest at dinner (before 8 PM)</li>
+          <li>Gap of at least 3 hours between dinner and sleep</li>
+          <li>Optional 16:8 IF from Week 7+: eat 12 PM–8 PM (skip early breakfast)</li>
+          <li>Never fast for more than 16 hours when exercising</li>
+          <li>Black coffee/green tea allowed during fasting window</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-title">🍽️ Eating Habits & Cheat Meals</div>
+      <div class="tip-text">
+        <ul>
+          <li>Eat slowly — chew 20–30 times per bite; satiety takes 20 min</li>
+          <li>Use smaller plates (200–250mm) — reduces intake by 22% on average</li>
+          <li>Start every lunch and dinner with a large glass of water or salad</li>
+          <li>Allow <strong>1 cheat meal per week</strong> (not a cheat day) — prevents burnout</li>
+          <li>Cheat meal: Saturday lunch is ideal (most active socially)</li>
+          <li>Avoid liquid calories — juice, chai with sugar, lassi (unless planned)</li>
+          <li>Cook in bulk on Sundays — meal prep reduces poor food choices</li>
         </ul>
       </div>
     </div>
@@ -955,25 +990,256 @@ const meals = [
         ]
       },
       {
-        day: 'Thursday 🥗 (Refeed Veg)', calories: 1900, veg: true,
+        day: 'Wednesday 🍗', calories: 1650, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg White Omelette + Roti', desc: '4 egg whites + 1 whole egg omelette with tomato-onion + 1 roti', cals: 350, protein: 28 },
+          { type: 'lunch', name: 'Chicken Tikka + Rice', desc: '180g home-made chicken tikka (tawa grilled) + ½ cup brown rice + mint raita', cals: 480, protein: 48 },
+          { type: 'snack', name: 'Paneer Cubes + Cucumber', desc: '50g raw paneer cubes + cucumber slices + black salt', cals: 130, protein: 9 },
+          { type: 'dinner', name: 'Prawn Stir-Fry + Roti', desc: '150g prawn dry sabzi (capsicum, onion) + 2 rotis + green salad', cals: 490, protein: 40 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗 (Low Carb Veg)', calories: 1600, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Besan Cheela + Green Chutney', desc: '3 besan cheelas with grated carrot + 1 cup dahi + green chutney (no oil)', cals: 370, protein: 20 },
+          { type: 'lunch', name: 'Tofu Stir-Fry + Roti', desc: '150g firm tofu stir-fry with capsicum, broccoli, peas + 2 rotis', cals: 430, protein: 24 },
+          { type: 'snack', name: 'Sprouts + Curd', desc: '1 cup mixed moong sprouts + 1 cup low-fat dahi + cumin', cals: 160, protein: 14 },
+          { type: 'dinner', name: 'Palak Dal + Roti', desc: '1 cup palak-moong dal + 2 rotis + cucumber salad', cals: 470, protein: 22 },
+        ]
+      },
+      {
+        day: 'Friday 🍗 (Low Carb Non-Veg)', calories: 1600, veg: false,
+        meals: [
+          { type: 'breakfast', name: '3-Egg Omelette + Salad', desc: '3-egg omelette with spinach & tomato (no bread) + large cucumber salad', cals: 330, protein: 26 },
+          { type: 'lunch', name: 'Fish Curry + Small Rice', desc: '200g rohu/catla fish curry + ¼ cup brown rice + mixed veg sabzi', cals: 490, protein: 44 },
+          { type: 'snack', name: 'Boiled Eggs + Black Coffee', desc: '2 boiled eggs + 1 black coffee (no sugar)', cals: 140, protein: 14 },
+          { type: 'dinner', name: 'Chicken Soup (No Roti)', desc: 'Large bowl of chicken vegetable soup (200g chicken + lauki, carrots, peas)', cals: 400, protein: 40 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗 (Refeed Veg)', calories: 1900, veg: true,
         meals: [
           { type: 'breakfast', name: 'Paratha + Curd + Lassi', desc: '2 aloo parathas (small, minimal ghee) + 1 cup curd + 1 glass buttermilk (chaas)', cals: 520, protein: 18 },
-          { type: 'lunch', name: 'Full Veg Thali', desc: '1 cup rajma + ½ cup rice + 2 rotis + sabzi + raita + salad', cals: 620, protein: 26 },
+          { type: 'lunch', name: 'Full Veg Thali', desc: '1 cup rajma + ½ cup rice + 2 rotis + sabzi (no brinjal) + raita + salad', cals: 620, protein: 26 },
           { type: 'snack', name: 'Banana + Peanuts', desc: '2 bananas + 20g roasted peanuts', cals: 200, protein: 6 },
           { type: 'dinner', name: 'Paneer + Dal + Roti', desc: '80g paneer sabzi + 1 cup dal + 2 rotis + cucumber salad', cals: 530, protein: 28 },
+        ]
+      },
+      {
+        day: 'Sunday 🍗 (Refeed Non-Veg)', calories: 1900, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Idli + Egg Curry + Chutney', desc: '4 steamed idlis + 2-egg tomato curry + coconut chutney', cals: 510, protein: 28 },
+          { type: 'lunch', name: 'Chicken Biryani (Light)', desc: '1 cup light chicken biryani (brown rice, 200g chicken) + 1 cup raita + salad', cals: 620, protein: 48 },
+          { type: 'snack', name: 'Fruit Chaat', desc: 'Mixed fruit chaat: apple, pomegranate, guava + chaat masala (no sugar)', cals: 180, protein: 3 },
+          { type: 'dinner', name: 'Grilled Fish + Roti + Sabzi', desc: '200g grilled fish + 2 rotis + mixed veg sabzi (no brinjal)', cals: 520, protein: 42 },
+        ]
+      },
+    ]
+  },
+  {
+    week: 'Week 7–8: Intensify & Lean',
+    days: [
+      {
+        day: 'Monday 🥗 (High Protein Veg)', calories: 1650, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Moong Dal Cheela + Curd', desc: '3 moong dal cheelas + 1 cup low-fat dahi + green chutney (no oil)', cals: 380, protein: 22 },
+          { type: 'lunch', name: 'Soya Keema + Rice', desc: '150g soya granule keema (onion-tomato masala) + ½ cup brown rice + cucumber salad', cals: 480, protein: 30 },
+          { type: 'snack', name: 'Roasted Chana + Chaas', desc: '40g roasted chana + 1 glass buttermilk (no sugar)', cals: 170, protein: 12 },
+          { type: 'dinner', name: 'Paneer Tikka + Roti', desc: '100g home-grilled paneer tikka (tawa, minimal oil) + 2 rotis + mint chutney', cals: 500, protein: 26 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗', calories: 1650, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Whites + Dalia', desc: '4 egg whites + 1 whole egg bhurji + 60g dalia porridge', cals: 380, protein: 30 },
+          { type: 'lunch', name: 'Chicken + Chana Salad', desc: '150g grilled chicken + ½ cup boiled chickpeas + large salad + lemon dressing', cals: 460, protein: 50 },
+          { type: 'snack', name: 'Peanut Butter + Apple', desc: '1 tbsp peanut butter + 1 apple slices', cals: 170, protein: 5 },
+          { type: 'dinner', name: 'Masoor Dal + Roti + Chicken Broth', desc: '1 cup masoor dal + 2 rotis + small bowl of clear chicken broth', cals: 490, protein: 36 },
+        ]
+      },
+      {
+        day: 'Wednesday 🍗', calories: 1650, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Sandwich + Coffee', desc: '2 whole wheat slices + 3-egg omelette (no mayo) + lettuce, tomato + black coffee', cals: 400, protein: 26 },
+          { type: 'lunch', name: 'Rohu Fish Curry + Roti', desc: '200g rohu fish curry (mustard-tomato gravy) + 2 rotis + onion-lemon salad', cals: 490, protein: 42 },
+          { type: 'snack', name: 'Sprouts + Boiled Egg', desc: '½ cup moong sprouts + 1 boiled egg + chaat masala', cals: 140, protein: 14 },
+          { type: 'dinner', name: 'Chicken Stir-Fry (No Rice)', desc: '200g chicken breast stir-fry with broccoli, capsicum, carrot (soy sauce, minimal oil)', cals: 420, protein: 50 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗', calories: 1650, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats + Peanut Butter + Banana', desc: '80g oats + 1 tbsp peanut butter + 1 banana + cinnamon', cals: 420, protein: 14 },
+          { type: 'lunch', name: 'Rajma + Roti (No Rice)', desc: '1.5 cups rajma curry + 2 rotis + cucumber-onion salad + 1 cup chaas', cals: 510, protein: 28 },
+          { type: 'snack', name: 'Makhana + Almonds', desc: '30g roasted makhana + 8 almonds + black coffee (no sugar)', cals: 160, protein: 6 },
+          { type: 'dinner', name: 'Soya + Dal + Roti', desc: '½ cup soya chunks sabzi + 1 cup moong dal + 2 rotis + green salad', cals: 490, protein: 30 },
+        ]
+      },
+      {
+        day: 'Friday 🍗', calories: 1650, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Poha + Boiled Eggs', desc: '1 cup cooked poha with peas + 2 boiled eggs + green chutney', cals: 390, protein: 22 },
+          { type: 'lunch', name: 'Chicken Tikka + Brown Rice', desc: '180g tawa chicken tikka + ½ cup brown rice + mint raita + salad', cals: 480, protein: 46 },
+          { type: 'snack', name: 'Fruit + Curd', desc: '1 small bowl papaya/guava + 1 cup low-fat dahi (unsweetened)', cals: 140, protein: 6 },
+          { type: 'dinner', name: 'Prawn Masala + Roti', desc: '150g prawn dry masala (minimal oil) + 2 rotis + palak sabzi', cals: 510, protein: 40 },
         ]
       },
       {
         day: 'Saturday 🥗 (Refeed Veg)', calories: 1900, veg: true,
         meals: [
           { type: 'breakfast', name: 'Idli + Sambhar + Chutney', desc: '4 steamed idlis + 1 cup vegetable sambhar + coconut chutney', cals: 440, protein: 16 },
-          { type: 'lunch', name: 'Chole Bhature (Light)', desc: '1 cup chole + 1 small bhatura (fried, once a week treat) + onion-lemon salad', cals: 580, protein: 20 },
+          { type: 'lunch', name: 'Chole Bhature (Light)', desc: '1 cup chole + 1 small bhatura (treat) + onion-lemon salad', cals: 580, protein: 20 },
           { type: 'snack', name: 'Fruit Chaat', desc: 'Mixed fruit chaat: apple, pomegranate, guava + chaat masala (no sugar)', cals: 180, protein: 3 },
           { type: 'dinner', name: 'Mixed Veg Dal Khichdi', desc: '1 cup dal-rice khichdi + 1 cup raita + roasted papad', cals: 520, protein: 20 },
         ]
       },
+      {
+        day: 'Sunday 🍗 (Refeed Non-Veg)', calories: 1900, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Paratha + Egg + Curd', desc: '2 whole wheat parathas (light ghee) + 2-egg omelette + 1 cup dahi', cals: 520, protein: 26 },
+          { type: 'lunch', name: 'Fish Thali', desc: '200g rohu fish curry + ½ cup brown rice + dal + sabzi (no brinjal) + raita', cals: 620, protein: 46 },
+          { type: 'snack', name: 'Coconut Water + Banana', desc: '1 tender coconut water + 1 banana', cals: 170, protein: 2 },
+          { type: 'dinner', name: 'Chicken + Palak + Roti', desc: '150g chicken palak (spinach curry, light) + 2 rotis + onion salad', cals: 510, protein: 40 },
+        ]
+      },
     ]
-  }
+  },
+  {
+    week: 'Week 9–10: Final Push',
+    days: [
+      {
+        day: 'Monday 🥗 (Calorie Deficit Veg)', calories: 1550, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Besan Cheela + Chaas', desc: '2 besan cheelas (no oil) + 1 glass thin buttermilk + green chutney', cals: 300, protein: 16 },
+          { type: 'lunch', name: 'Paneer Bowl + 1 Roti', desc: '100g grilled paneer + 1 cup mixed veg sabzi + 1 roti + large salad', cals: 420, protein: 24 },
+          { type: 'snack', name: 'Cucumber + Sprouts', desc: '1 cup sprouts chaat + 1 cucumber sliced with lemon', cals: 130, protein: 10 },
+          { type: 'dinner', name: 'Moong Dal Soup + Roti', desc: '1 cup thin moong dal soup + 2 rotis + lauki sabzi (bottle gourd)', cals: 430, protein: 18 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗 (Calorie Deficit Non-Veg)', calories: 1550, veg: false,
+        meals: [
+          { type: 'breakfast', name: '3-Egg Omelette (No Bread)', desc: '3 eggs with spinach, tomato, onion (no bread/roti) + 1 black coffee', cals: 280, protein: 22 },
+          { type: 'lunch', name: 'Grilled Chicken + Brown Rice', desc: '200g grilled chicken breast + ½ cup brown rice + large salad + lemon water', cals: 470, protein: 52 },
+          { type: 'snack', name: '2 Boiled Eggs', desc: '2 boiled eggs + black salt + lemon juice', cals: 140, protein: 14 },
+          { type: 'dinner', name: 'Fish Soup + Roti', desc: 'Clear fish soup (200g fish, no cream) + 1 roti + cucumber salad', cals: 420, protein: 42 },
+        ]
+      },
+      {
+        day: 'Wednesday 🍗', calories: 1580, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Dalia + Egg', desc: '70g dalia porridge (water-cooked) + 1 boiled egg + 1 small banana', cals: 360, protein: 18 },
+          { type: 'lunch', name: 'Chicken Keema + 2 Rotis', desc: '150g lean chicken keema + 2 rotis + green chutney + onion salad', cals: 490, protein: 42 },
+          { type: 'snack', name: 'Peanuts + Chaas', desc: '15g roasted peanuts + 1 glass buttermilk (no sugar, thin)', cals: 130, protein: 7 },
+          { type: 'dinner', name: 'Egg Curry + Rice', desc: '3-egg tomato curry (light) + ¼ cup brown rice + green salad', cals: 430, protein: 28 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗', calories: 1580, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats Porridge + Almonds', desc: '70g oats cooked in water + 8 almonds + 1 apple (no sugar, no milk)', cals: 360, protein: 12 },
+          { type: 'lunch', name: 'Chole + 2 Rotis', desc: '1 cup chole curry + 2 rotis + cucumber raita + onion salad', cals: 490, protein: 22 },
+          { type: 'snack', name: 'Makhana', desc: '40g roasted makhana + black coffee (no sugar)', cals: 140, protein: 5 },
+          { type: 'dinner', name: 'Palak Paneer + 1 Roti', desc: '80g paneer in light spinach gravy + 1 roti + green salad', cals: 440, protein: 22 },
+        ]
+      },
+      {
+        day: 'Friday 🍗', calories: 1580, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Bhurji + Toast', desc: '3-egg bhurji with onion & tomato + 2 whole wheat toasts', cals: 390, protein: 24 },
+          { type: 'lunch', name: 'Fish + Sabzi + Roti', desc: '180g fish fry (tawa, minimal oil) + mixed veg sabzi + 2 rotis + salad', cals: 490, protein: 40 },
+          { type: 'snack', name: 'Boiled Egg + Guava', desc: '1 boiled egg + 1 guava', cals: 120, protein: 8 },
+          { type: 'dinner', name: 'Chicken Salad Bowl', desc: '200g grilled chicken + large salad (cabbage, carrot, cucumber) + lemon-curd dressing', cals: 400, protein: 50 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗 (Refeed)', calories: 1850, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Upma + Curd + Banana', desc: '1 cup sooji upma + 1 cup low-fat dahi + 1 banana', cals: 490, protein: 16 },
+          { type: 'lunch', name: 'Rajma + Rice + Sabzi', desc: '1 cup rajma + ½ cup rice + sabzi (no brinjal) + raita + salad', cals: 560, protein: 24 },
+          { type: 'snack', name: 'Fruit Smoothie', desc: '1 banana + 200ml low-fat milk + 1 tsp cocoa (no sugar)', cals: 180, protein: 8 },
+          { type: 'dinner', name: 'Soya Chunks + Dal + Roti', desc: '100g soya chunks sabzi + 1 cup dal + 2 rotis + cucumber salad', cals: 520, protein: 30 },
+        ]
+      },
+      {
+        day: 'Sunday 🍗 (Refeed)', calories: 1850, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Idli + Egg Curry + Chutney', desc: '4 steamed idlis + 2-egg tomato curry + coconut chutney', cals: 480, protein: 26 },
+          { type: 'lunch', name: 'Chicken Biryani (Light)', desc: '1 cup light chicken biryani (brown rice) + raita + salad', cals: 560, protein: 40 },
+          { type: 'snack', name: 'Coconut Water + Fruit', desc: '1 tender coconut water + 1 guava', cals: 140, protein: 2 },
+          { type: 'dinner', name: 'Grilled Chicken + 2 Rotis', desc: '200g grilled chicken breast + 2 rotis + palak sabzi + salad', cals: 510, protein: 50 },
+        ]
+      },
+    ]
+  },
+  {
+    week: 'Week 11–13: Finish Strong 🏁',
+    days: [
+      {
+        day: 'Monday 🥗 (Maintenance Veg)', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Moong Dal Cheela + Dahi', desc: '3 moong dal cheelas + 1 cup low-fat dahi + 1 apple', cals: 400, protein: 22 },
+          { type: 'lunch', name: 'Rajma + Rice + Salad', desc: '1 cup rajma + ½ cup brown rice + mixed sabzi (no brinjal) + raita', cals: 490, protein: 22 },
+          { type: 'snack', name: 'Sprouts + Makhana', desc: '½ cup sprouts + 30g makhana + lemon + black salt', cals: 170, protein: 12 },
+          { type: 'dinner', name: 'Paneer Bhurji + Roti + Dal', desc: '80g paneer bhurji + 1 cup moong dal + 2 rotis + cucumber salad', cals: 530, protein: 28 },
+        ]
+      },
+      {
+        day: 'Tuesday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Omelette + Dalia', desc: '3-egg omelette with veggies + 60g dalia porridge (water-cooked)', cals: 390, protein: 28 },
+          { type: 'lunch', name: 'Chicken + Dal + Roti', desc: '150g grilled chicken + 1 cup masoor dal + 2 rotis + salad', cals: 510, protein: 48 },
+          { type: 'snack', name: 'Boiled Egg + Peanuts', desc: '2 boiled eggs + 15g roasted peanuts', cals: 190, protein: 16 },
+          { type: 'dinner', name: 'Chicken Soup + 1 Roti', desc: 'Clear spiced chicken soup (180g chicken + veg) + 1 roti + green salad', cals: 430, protein: 40 },
+        ]
+      },
+      {
+        day: 'Wednesday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Poha + 2 Boiled Eggs', desc: '1 cup cooked poha (peas, curry leaves) + 2 boiled eggs', cals: 400, protein: 24 },
+          { type: 'lunch', name: 'Fish Thali (Balanced)', desc: '180g rohu fish curry + ½ cup rice + sabzi + cucumber raita', cals: 510, protein: 40 },
+          { type: 'snack', name: 'Chaas + Makhana', desc: '1 glass thin buttermilk + 30g roasted makhana', cals: 150, protein: 6 },
+          { type: 'dinner', name: 'Prawn + Roti + Sabzi', desc: '150g prawn masala (dry, light oil) + 2 rotis + bhindi sabzi', cals: 520, protein: 38 },
+        ]
+      },
+      {
+        day: 'Thursday 🥗', calories: 1700, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Oats + Peanut Butter + Banana', desc: '80g oats + 1 tbsp peanut butter + 1 banana + 5 almonds', cals: 420, protein: 14 },
+          { type: 'lunch', name: 'Chole + Roti + Raita', desc: '1 cup chole curry + 2 rotis + onion-cucumber raita', cals: 500, protein: 22 },
+          { type: 'snack', name: 'Roasted Chana + Curd', desc: '30g roasted chana + 1 cup dahi (unsweetened)', cals: 170, protein: 12 },
+          { type: 'dinner', name: 'Tofu + Dal + Roti', desc: '120g tofu stir-fry (soy sauce, capsicum) + 1 cup dal + 2 rotis', cals: 510, protein: 28 },
+        ]
+      },
+      {
+        day: 'Friday 🍗', calories: 1700, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Egg Bhurji + Toast', desc: '3-egg bhurji (onion, tomato, green chilli) + 2 whole wheat toasts', cals: 400, protein: 24 },
+          { type: 'lunch', name: 'Chicken + Brown Rice Bowl', desc: '160g grilled chicken + ¾ cup brown rice + salad + lemon', cals: 500, protein: 46 },
+          { type: 'snack', name: 'Apple + Peanut Butter', desc: '1 apple + 1 tbsp peanut butter', cals: 170, protein: 5 },
+          { type: 'dinner', name: 'Fish + Palak Sabzi + Roti', desc: '180g grilled fish + palak sabzi + 2 rotis + onion salad', cals: 500, protein: 42 },
+        ]
+      },
+      {
+        day: 'Saturday 🥗 (Final Refeed)', calories: 2000, veg: true,
+        meals: [
+          { type: 'breakfast', name: 'Paratha + Curd + Lassi', desc: '2 aloo parathas (small, light ghee) + 1 cup dahi + 1 glass chaas', cals: 530, protein: 18 },
+          { type: 'lunch', name: 'Celebration Veg Thali 🎉', desc: '1 cup rajma + ½ cup rice + 2 rotis + 2 sabzis (no brinjal) + raita + papad', cals: 680, protein: 28 },
+          { type: 'snack', name: 'Banana Milkshake (Light)', desc: '1 banana + 200ml low-fat milk blended (no sugar)', cals: 170, protein: 8 },
+          { type: 'dinner', name: 'Paneer + Dal + Roti', desc: '100g paneer sabzi + 1 cup dal + 2 rotis + salad', cals: 560, protein: 30 },
+        ]
+      },
+      {
+        day: 'Sunday 🍗 (Goal Reached! 🏆)', calories: 2000, veg: false,
+        meals: [
+          { type: 'breakfast', name: 'Full Egg Breakfast', desc: '3-egg omelette + 2 whole wheat toasts + 1 banana + black coffee', cals: 510, protein: 28 },
+          { type: 'lunch', name: 'Chicken Biryani (Celebration) 🎉', desc: '1.5 cups light chicken biryani + raita + onion salad — You made it to 70kg!', cals: 680, protein: 50 },
+          { type: 'snack', name: 'Coconut Water + Peanuts', desc: '1 tender coconut water + 20g peanuts', cals: 170, protein: 6 },
+          { type: 'dinner', name: 'Grilled Chicken + Roti + Sabzi 🏁', desc: '180g grilled chicken + 2 rotis + palak sabzi + salad — Journey complete!', cals: 520, protein: 48 },
+        ]
+      },
+    ]
+  },
 ];
 
 // ===== STATE =====
